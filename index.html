@@ -30,12 +30,14 @@
   /* ✅ Card tự co giãn theo kích thước màn hình */
   .card {
     width: min(90vw, 500px);
-    height: min(75vh, 400px);
-    aspect-ratio: 3 / 2; /* giữ tỉ lệ đẹp */
+    max-height: 90vh; /* co giãn theo màn hình */
     position: relative;
     transform-style: preserve-3d;
     transition: transform 1.2s ease;
     cursor: pointer;
+    border-radius: 16px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+    background: #fff0f6;
   }
 
   .card.open {
@@ -48,7 +50,7 @@
     height: 100%;
     backface-visibility: hidden;
     border-radius: 16px;
-    overflow: hidden;
+    /* ❌ bỏ overflow: hidden để không cắt chữ */
   }
 
   .front {
@@ -73,16 +75,17 @@
     opacity: 0.9;
   }
 
+  /* ✅ Cho phép cuộn nội dung trong mặt trong */
   .inside {
     background: #fff0f6;
     transform: rotateY(180deg);
-    box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+    box-shadow: none;
     padding: clamp(12px, 3vw, 24px);
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    overflow-y: auto;
+    overflow-y: auto; /* cho phép cuộn khi có nhiều chữ */
     scrollbar-width: thin;
     scrollbar-color: #ffb3c6 #fff0f6;
   }
@@ -192,7 +195,7 @@
   @media (max-width: 480px) {
     .card {
       width: 92vw;
-      height: 68vh;
+      max-height: 80vh; /* ✅ thay vì height cố định */
     }
     .inside {
       padding: 12px;
@@ -202,7 +205,6 @@
     }
   }
 </style>
-
 </head>
 <body>
 
@@ -305,4 +307,3 @@
 </script>
 </body>
 </html>
-
