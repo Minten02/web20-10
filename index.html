@@ -29,8 +29,8 @@
 
   /* ✅ Card tự co giãn theo kích thước màn hình */
   .card {
-    width: min(90vw, 600px);
-    height: min(70vh, 420px);
+    width: min(90vw, 500px);
+    height: min(75vh, 400px);
     aspect-ratio: 3 / 2; /* giữ tỉ lệ đẹp */
     position: relative;
     transform-style: preserve-3d;
@@ -60,15 +60,16 @@
     box-shadow: 0 12px 40px rgba(0,0,0,0.2);
     color: white;
     text-align: center;
+    padding: 16px;
   }
 
   .front h1 {
-    font-size: clamp(24px, 6vw, 40px);
-    margin-bottom: 8px;
+    font-size: clamp(22px, 6vw, 38px);
+    margin-bottom: 6px;
   }
 
   .front p {
-    font-size: clamp(14px, 3.5vw, 18px);
+    font-size: clamp(13px, 3.5vw, 17px);
     opacity: 0.9;
   }
 
@@ -76,7 +77,7 @@
     background: #fff0f6;
     transform: rotateY(180deg);
     box-shadow: 0 12px 40px rgba(0,0,0,0.15);
-    padding: clamp(16px, 3vw, 28px);
+    padding: clamp(12px, 3vw, 24px);
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -89,12 +90,12 @@
   .inside h2 {
     text-align: center;
     color: #d63384;
-    font-size: clamp(18px, 4vw, 26px);
+    font-size: clamp(16px, 4vw, 24px);
     margin-bottom: 10px;
   }
 
   .wishes {
-    font-size: clamp(13px, 2.8vw, 17px);
+    font-size: clamp(12px, 3.2vw, 16px);
     color: #5a3d6e;
     opacity: 0;
     white-space: pre-line;
@@ -105,8 +106,8 @@
   /* 💗 Tim bay pastel khi mở thiệp */
   .heart {
     position: fixed;
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     background: pink;
     transform: rotate(45deg);
     animation: floatUp 4s ease-in forwards;
@@ -116,13 +117,13 @@
   .heart::before, .heart::after {
     content: "";
     position: absolute;
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     background: inherit;
     border-radius: 50%;
   }
-  .heart::before { top: -10px; left: 0; }
-  .heart::after { left: -10px; top: 0; }
+  .heart::before { top: -9px; left: 0; }
+  .heart::after { left: -9px; top: 0; }
 
   @keyframes floatUp {
     0% { transform: translateY(0) scale(1) rotate(45deg); opacity: 1; }
@@ -133,8 +134,8 @@
   .falling-heart {
     position: fixed;
     top: -10px;
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     background: pink;
     transform: rotate(45deg);
     animation: heartFall linear forwards;
@@ -147,21 +148,20 @@
   .falling-heart::after {
     content: '';
     position: absolute;
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     background: inherit;
     border-radius: 50%;
   }
 
-  .falling-heart::before { top: -9px; left: 0; }
-  .falling-heart::after { left: 9px; top: 0; }
+  .falling-heart::before { top: -8px; left: 0; }
+  .falling-heart::after { left: 8px; top: 0; }
 
   @keyframes heartFall {
     0% { transform: translateY(0) rotate(45deg) scale(1); opacity: 1; }
     100% { transform: translateY(100vh) rotate(360deg) scale(0.6); opacity: 0; }
   }
 
-  /* Hiệu ứng chữ chạy */
   .fade-in {
     animation: fadeIn 0.7s forwards;
   }
@@ -171,16 +171,14 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  audio {
-    display: none;
-  }
+  audio { display: none; }
 
   .hint {
     position: absolute;
-    bottom: 12px;
+    bottom: 10px;
     width: 100%;
     text-align: center;
-    font-size: clamp(12px, 3vw, 16px);
+    font-size: clamp(11px, 3vw, 15px);
     color: rgba(255,255,255,0.9);
     animation: blink 1.2s infinite alternate;
   }
@@ -189,7 +187,22 @@
     from { opacity: 1; }
     to { opacity: 0.3; }
   }
+
+  /* 📱 Responsive tinh chỉnh cho điện thoại nhỏ */
+  @media (max-width: 480px) {
+    .card {
+      width: 92vw;
+      height: 68vh;
+    }
+    .inside {
+      padding: 12px;
+    }
+    .wishes {
+      line-height: 1.4;
+    }
+  }
 </style>
+
 </head>
 <body>
 
@@ -292,3 +305,4 @@
 </script>
 </body>
 </html>
+
