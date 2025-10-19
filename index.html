@@ -5,24 +5,33 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Thiệp Chúc Mừng 20/10</title>
 <style>
-  body {
+  /* ✅ Toàn màn hình thật, tương thích mọi thiết bị */
+  html, body {
     margin: 0;
-    height: 100vh;
-    overflow: hidden;
+    padding: 0;
+    height: 100dvh;
+    height: calc(var(--vh, 1vh) * 100);
     background: linear-gradient(120deg, #fce4ec, #f8bbd0);
     font-family: 'Segoe UI', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
   }
 
   .scene {
     perspective: 1000px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
+  /* ✅ Card tự co giãn theo kích thước màn hình */
   .card {
-    width: 600px;
-    height: 420px;
+    width: min(90vw, 600px);
+    height: min(70vh, 420px);
+    aspect-ratio: 3 / 2; /* giữ tỉ lệ đẹp */
     position: relative;
     transform-style: preserve-3d;
     transition: transform 1.2s ease;
@@ -50,15 +59,16 @@
     justify-content: center;
     box-shadow: 0 12px 40px rgba(0,0,0,0.2);
     color: white;
+    text-align: center;
   }
 
   .front h1 {
-    font-size: 38px;
-    margin-bottom: 10px;
+    font-size: clamp(24px, 6vw, 40px);
+    margin-bottom: 8px;
   }
 
   .front p {
-    font-size: 18px;
+    font-size: clamp(14px, 3.5vw, 18px);
     opacity: 0.9;
   }
 
@@ -66,7 +76,7 @@
     background: #fff0f6;
     transform: rotateY(180deg);
     box-shadow: 0 12px 40px rgba(0,0,0,0.15);
-    padding: 30px;
+    padding: clamp(16px, 3vw, 28px);
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -79,12 +89,12 @@
   .inside h2 {
     text-align: center;
     color: #d63384;
-    font-size: 28px;
-    margin-bottom: 15px;
+    font-size: clamp(18px, 4vw, 26px);
+    margin-bottom: 10px;
   }
 
   .wishes {
-    font-size: 17px;
+    font-size: clamp(13px, 2.8vw, 17px);
     color: #5a3d6e;
     opacity: 0;
     white-space: pre-line;
@@ -167,10 +177,10 @@
 
   .hint {
     position: absolute;
-    bottom: 15px;
+    bottom: 12px;
     width: 100%;
     text-align: center;
-    font-size: 14px;
+    font-size: clamp(12px, 3vw, 16px);
     color: rgba(255,255,255,0.9);
     animation: blink 1.2s infinite alternate;
   }
@@ -188,7 +198,7 @@
     <div class="front">
       <h1>🌸 20/10 🌸</h1>
       <p>Chúc mừng Ngày Phụ Nữ Việt Nam</p>
-      <div class="hint">(Click để mở thiệp)</div>
+      <div class="hint">(Chạm để mở thiệp 💌)</div>
     </div>
     <div class="inside">
       <h2>Gửi đến cô gái tuyệt vời 💖</h2>
@@ -200,6 +210,13 @@
 <audio id="bgm" src="codoidieu.mp3"></audio>
 
 <script>
+  /* ✅ Đảm bảo full màn hình thật trên mobile */
+  function setFullHeight() {
+    document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+  }
+  setFullHeight();
+  window.addEventListener('resize', setFullHeight);
+
   const wishesText = [
     "Chúc bạn luôn xinh đẹp, rạng rỡ và tràn đầy năng lượng mỗi ngày!",
     "Mong bạn luôn được yêu thương, trân trọng và hạnh phúc bên những người thân yêu.",
@@ -246,7 +263,7 @@
   card.addEventListener("click", () => {
     if (!opened) {
       card.classList.add("open");
-      bgm.play();
+      bgm.play().catch(()=>{});
       showWishes();
       for (let i = 0; i < 25; i++) setTimeout(createHeart, i * 150);
       opened = true;
@@ -275,4 +292,3 @@
 </script>
 </body>
 </html>
-
