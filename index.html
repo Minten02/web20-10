@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Thiệp Chúc Mừng 20/10</title>
 <style>
+  :root {
+    --vh: 1vh;
+  }
+
   html, body {
     margin: 0;
     padding: 0;
@@ -15,54 +19,57 @@
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    -webkit-user-select: none;
-    user-select: none;
   }
 
   .scene {
     perspective: 1000px;
     width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
   }
 
+  /* Card giờ có tỉ lệ cố định (vừa khung dọc mobile) */
   .card {
-    width: min(90vw, 400px);
-    height: min(70vh, 550px);
+    width: 90vw;
+    aspect-ratio: 3/4; /* ✅ giữ tỷ lệ đứng đẹp */
+    max-width: 400px;
     position: relative;
     transform-style: preserve-3d;
     transition: transform 1.2s ease;
-    cursor: pointer;
     border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    cursor: pointer;
     background: #fff0f6;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
   }
 
-  .card.open { transform: rotateY(180deg); }
+  .card.open {
+    transform: rotateY(180deg);
+  }
 
   .front, .inside {
     position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
+    inset: 0;
     border-radius: 20px;
+    backface-visibility: hidden;
   }
 
   .front {
     background: linear-gradient(145deg, #ff8fab, #ffb3c6);
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
-    text-align: center;
+    align-items: center;
     color: white;
-    padding: 20px;
+    text-align: center;
+    padding: 24px;
   }
 
   .front h1 {
-    font-size: clamp(26px, 7vw, 40px);
-    margin: 0 0 8px 0;
+    font-size: clamp(26px, 7vw, 42px);
+    font-weight: 700;
+    margin-bottom: 6px;
   }
 
   .front p {
@@ -73,23 +80,23 @@
 
   .hint {
     position: absolute;
-    bottom: 12px;
+    bottom: 14px;
     width: 100%;
     text-align: center;
-    font-size: clamp(11px, 3vw, 15px);
-    color: rgba(255,255,255,0.9);
+    font-size: clamp(11px, 3vw, 14px);
+    color: rgba(255,255,255,0.95);
     animation: blink 1.2s infinite alternate;
   }
 
   @keyframes blink {
     from { opacity: 1; }
-    to { opacity: 0.3; }
+    to { opacity: 0.4; }
   }
 
   .inside {
     background: #fff0f6;
     transform: rotateY(180deg);
-    padding: 18px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -108,12 +115,12 @@
   .wishes {
     font-size: clamp(13px, 3.5vw, 16px);
     color: #5a3d6e;
-    white-space: pre-line;
     line-height: 1.6;
     text-align: center;
+    white-space: pre-line;
   }
 
-  /* 💖 Tim bay và rơi */
+  /* Hiệu ứng tim */
   .heart, .falling-heart {
     position: fixed;
     width: 18px;
@@ -121,23 +128,20 @@
     background: pink;
     transform: rotate(45deg);
     opacity: 0.8;
-    z-index: 5;
     pointer-events: none;
+    z-index: 5;
   }
-
   .heart::before, .heart::after,
   .falling-heart::before, .falling-heart::after {
-    content: "";
+    content: '';
     position: absolute;
     width: inherit;
     height: inherit;
     background: inherit;
     border-radius: 50%;
   }
-
   .heart::before { top: -9px; left: 0; }
   .heart::after { left: -9px; top: 0; }
-
   .falling-heart::before { top: -8px; left: 0; }
   .falling-heart::after { left: 8px; top: 0; }
 
@@ -162,108 +166,103 @@
 
   audio { display: none; }
 
-  /* 📱 Tối ưu cho màn cực nhỏ */
   @media (max-width: 380px) {
-    .card { height: 65vh; width: 92vw; }
+    .card { aspect-ratio: 3/4.5; }
     .inside { padding: 12px; }
-    .front h1 { font-size: 24px; }
-    .front p { font-size: 13px; }
   }
 </style>
 </head>
 <body>
-
-<div class="scene">
-  <div class="card" id="card">
-    <div class="front">
-      <h1>🌸 20/10 🌸</h1>
-      <p>Chúc mừng Ngày Phụ Nữ Việt Nam</p>
-      <div class="hint">(Chạm để mở thiệp 💌)</div>
-    </div>
-    <div class="inside">
-      <h2>Gửi đến cô gái tuyệt vời 💖</h2>
-      <div class="wishes" id="wishes"></div>
+  <div class="scene">
+    <div class="card" id="card">
+      <div class="front">
+        <h1>🌸 20/10 🌸</h1>
+        <p>Chúc mừng Ngày Phụ Nữ Việt Nam</p>
+        <div class="hint">(Chạm để mở thiệp 💌)</div>
+      </div>
+      <div class="inside">
+        <h2>Gửi đến cô gái tuyệt vời 💖</h2>
+        <div class="wishes" id="wishes"></div>
+      </div>
     </div>
   </div>
-</div>
 
-<audio id="bgm" src="codoidieu.mp3"></audio>
+  <audio id="bgm" src="codoidieu.mp3"></audio>
 
 <script>
-  const card = document.getElementById("card");
-  const wishesContainer = document.getElementById("wishes");
-  const bgm = document.getElementById("bgm");
-  const wishesText = [
-    "Chúc bạn luôn xinh đẹp, rạng rỡ và tràn đầy năng lượng mỗi ngày!",
-    "Mong bạn luôn được yêu thương, trân trọng và hạnh phúc bên những người thân yêu.",
-    "Cảm ơn bạn đã làm thế giới này trở nên dịu dàng và đáng yêu hơn.",
-    "Chúc bạn có một ngày 20/10 ngập tràn hoa, quà và tiếng cười.",
-    "Mong mọi ước mơ của bạn sớm trở thành hiện thực, và mỗi ngày đều đáng sống!",
-    "Chúc bạn mãi mạnh mẽ, tự tin và luôn tỏa sáng như chính con người bạn.",
-    "Chúc cho những người phụ nữ xung quanh ta luôn được bình an, vui vẻ và rạng ngời hạnh phúc.",
-    "Chúc bạn luôn giữ trong tim ngọn lửa yêu thương, lòng bao dung và niềm tin vào cuộc sống.",
-    "Chúc bạn thật nhiều sức khỏe để theo đuổi điều mình yêu thích.",
-    "Chúc mọi điều tốt đẹp nhất luôn đến với bạn hôm nay và mãi mãi! 💐"
-  ];
-  let opened = false;
+const card = document.getElementById("card");
+const wishesContainer = document.getElementById("wishes");
+const bgm = document.getElementById("bgm");
+let opened = false;
 
-  function createHeart() {
-    const heart = document.createElement('div');
-    heart.className = 'heart';
-    heart.style.left = Math.random() * 100 + 'vw';
-    heart.style.bottom = Math.random() * 50 + 'px';
-    heart.style.background = `hsl(${Math.random()*360}, 80%, 85%)`;
-    heart.style.animation = 'floatUp 4s ease-in forwards';
-    document.body.appendChild(heart);
-    setTimeout(() => heart.remove(), 4000);
+const wishesText = [
+  "Chúc bạn luôn xinh đẹp, rạng rỡ và tràn đầy năng lượng mỗi ngày!",
+  "Mong bạn luôn được yêu thương, trân trọng và hạnh phúc bên những người thân yêu.",
+  "Cảm ơn bạn đã làm thế giới này trở nên dịu dàng và đáng yêu hơn.",
+  "Chúc bạn có một ngày 20/10 ngập tràn hoa, quà và tiếng cười.",
+  "Mong mọi ước mơ của bạn sớm trở thành hiện thực, và mỗi ngày đều đáng sống!",
+  "Chúc bạn mãi mạnh mẽ, tự tin và luôn tỏa sáng như chính con người bạn.",
+  "Chúc cho những người phụ nữ xung quanh ta luôn được bình an, vui vẻ và rạng ngời hạnh phúc.",
+  "Chúc bạn luôn giữ trong tim ngọn lửa yêu thương, lòng bao dung và niềm tin vào cuộc sống.",
+  "Chúc bạn thật nhiều sức khỏe để theo đuổi điều mình yêu thích.",
+  "Chúc mọi điều tốt đẹp nhất luôn đến với bạn hôm nay và mãi mãi! 💐"
+];
+
+function createHeart() {
+  const heart = document.createElement('div');
+  heart.className = 'heart';
+  heart.style.left = Math.random() * 100 + 'vw';
+  heart.style.bottom = Math.random() * 50 + 'px';
+  heart.style.background = `hsl(${Math.random()*360}, 80%, 85%)`;
+  heart.style.animation = 'floatUp 4s ease-in forwards';
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 4000);
+}
+
+function createFallingHeart() {
+  const heart = document.createElement('div');
+  heart.className = 'falling-heart';
+  heart.style.left = Math.random() * 100 + 'vw';
+  heart.style.background = `hsl(${Math.random() * 40 + 330}, 70%, ${Math.random() * 20 + 70}%)`;
+  heart.style.animation = `heartFall ${Math.random() * 3 + 4}s linear forwards`;
+  heart.style.transform = `rotate(45deg) scale(${Math.random() * 0.8 + 0.5})`;
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 7000);
+}
+setInterval(createFallingHeart, 400);
+
+async function showWishes() {
+  wishesContainer.innerHTML = "";
+  for (let i = 0; i < wishesText.length; i++) {
+    const p = document.createElement("p");
+    p.textContent = wishesText[i];
+    p.classList.add("fade-in");
+    wishesContainer.appendChild(p);
+    await new Promise(res => setTimeout(res, 900));
   }
+}
 
-  function createFallingHeart() {
-    const heart = document.createElement('div');
-    heart.className = 'falling-heart';
-    heart.style.left = Math.random() * 100 + 'vw';
-    heart.style.background = `hsl(${Math.random() * 40 + 330}, 70%, ${Math.random() * 20 + 70}%)`;
-    heart.style.animation = `heartFall ${Math.random() * 3 + 4}s linear forwards`;
-    heart.style.transform = `rotate(45deg) scale(${Math.random() * 0.8 + 0.5})`;
-    document.body.appendChild(heart);
-    setTimeout(() => heart.remove(), 7000);
-  }
-  setInterval(createFallingHeart, 400);
-
-  async function showWishes() {
+card.addEventListener("click", () => {
+  if (!opened) {
+    card.classList.add("open");
+    bgm.play().catch(()=>{});
+    showWishes();
+    for (let i = 0; i < 25; i++) setTimeout(createHeart, i * 150);
+    opened = true;
+  } else {
+    card.classList.remove("open");
+    bgm.pause();
+    bgm.currentTime = 0;
+    opened = false;
     wishesContainer.innerHTML = "";
-    for (let i = 0; i < wishesText.length; i++) {
-      const p = document.createElement("p");
-      p.textContent = wishesText[i];
-      p.classList.add("fade-in");
-      wishesContainer.appendChild(p);
-      await new Promise(res => setTimeout(res, 900));
-    }
   }
+});
 
-  card.addEventListener("click", () => {
-    if (!opened) {
-      card.classList.add("open");
-      bgm.play().catch(()=>{});
-      showWishes();
-      for (let i = 0; i < 25; i++) setTimeout(createHeart, i * 150);
-      opened = true;
-    } else {
-      card.classList.remove("open");
-      bgm.pause();
-      bgm.currentTime = 0;
-      opened = false;
-      wishesContainer.innerHTML = "";
-    }
-  });
-
-  /* Khắc phục lỗi vh trên mobile */
-  function setFullHeight() {
-    document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
-  }
-  setFullHeight();
-  window.addEventListener('resize', setFullHeight);
+function setFullHeight() {
+  document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+}
+setFullHeight();
+window.addEventListener('resize', setFullHeight);
 </script>
-
 </body>
 </html>
